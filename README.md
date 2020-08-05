@@ -5,8 +5,14 @@
 $ pipenv sync
 ```
 
-## monitoring
+## train
 
 ```
-$ tensorboard --logdir log/
+$ pipenv run python train.py
+```
+
+## monitor training
+
+```
+$ pipenv run tensorboard --logdir log/
 ```

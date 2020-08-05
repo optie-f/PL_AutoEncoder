@@ -33,7 +33,11 @@ checkpoint_callback = ModelCheckpoint(
 logger = TensorBoardLogger('log', name='mnist')
 trainer = Trainer(
     logger=logger,
-    default_root_dir='./checkpoints', checkpoint_callback=checkpoint_callback
+    default_root_dir='./log',
+    checkpoint_callback=checkpoint_callback,
+    row_log_interval=50,
+    max_epochs=4000,
+    gpus=0
 )
 
 trainer.fit(autoEncoder, train_loader)

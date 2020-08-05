@@ -36,10 +36,10 @@ class DENcoder(nn.Module):
                 LAN(in_dim, out_dim, activation=activation)
             )
 
-        self.encoder = nn.Sequential(*layers)
+        self.model = nn.Sequential(*layers)
 
     def forward(self, x):
-        return self.encoder(x)
+        return self.model(x)
 
 
 class AutoEncoder(pl.LightningModule):
@@ -58,17 +58,11 @@ class AutoEncoder(pl.LightningModule):
         return img_recon
 
     def training_step(self, batch, batch_idx):
-        """
-        ```
-        for i, batch in enumerate(batches):
-            training_step(batch, i)
-        ```
-        """
         img, _ = batch
         img_recon = self.forward(img)
         loss = self.criterion(img, img_recon)
 
-        if self.global_step % 100 == 0:
+        if self.global_step % self.trainer.row_log_interval == 0:
             sqrt_nb = int(sqrt(img.size(0)))
             self.logger.experiment.add_image(
                 "image/original",
