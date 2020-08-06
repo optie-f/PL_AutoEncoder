@@ -32,7 +32,7 @@ def train(data_name, hparams):
         default_root_dir='./log',
         checkpoint_callback=checkpoint_callback,
         row_log_interval=50,
-        max_epochs=1000,
+        max_epochs=hparams.max_epochs,
         gpus=hparams.gpus,
         tpu_cores=hparams.tpu_cores
     )
@@ -44,6 +44,7 @@ def main():
     parser = ArgumentParser()
     parser.add_argument('--gpus', default=None)
     parser.add_argument('--tpu_cores', default=None)
+    parser.add_argument('--max_epochs', default=50)
     args = parser.parse_args()
 
     for data_name in ['MNIST', 'FashionMNIST', 'KMNIST', 'CIFAR10']:
