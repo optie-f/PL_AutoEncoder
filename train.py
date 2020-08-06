@@ -9,6 +9,7 @@ from argparse import ArgumentParser
 
 def train(data_name, hparams):
     train_loader = DataModule(data_name=data_name)
+    train_loader.prepare_data()
     train_loader.setup()
 
     in_dim = np.prod(train_loader.dataset[0][0].size())
