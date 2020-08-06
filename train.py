@@ -4,9 +4,10 @@ from pytorch_lightning.callbacks import ModelCheckpoint
 import numpy as np
 from modules.model import AutoEncoder
 from modules.data_loader import DataModule
+from argparse import ArgumentParser
 
 
-def train(data_name):
+def train(data_name, hparams):
     train_loader = DataModule(data_name=data_name)
     train_loader.setup()
 
@@ -31,15 +32,21 @@ def train(data_name):
         checkpoint_callback=checkpoint_callback,
         row_log_interval=50,
         max_epochs=1000,
-        gpus=0
+        gpus=hparams.gpus,
+        tpu_cores=hparams.tpu_cores
     )
 
     trainer.fit(autoEncoder, train_loader)
 
 
 def main():
+    parser = ArgumentParser()
+    parser.add_argument('--gpus', default=None)
+    parser.add_argument('--tpu_cores', default=None)
+    args = parser.parse_args()
+
     for data_name in ['MNIST', 'FashionMNIST', 'KMNIST', 'CIFAR10']:
-        train(data_name)
+        train(data_name, args)
 
 
 if __name__ == "__main__":
