@@ -7,8 +7,8 @@ from modules.data_loader import DataModule
 from argparse import ArgumentParser
 
 
-def train(data_name, hparams):
-    train_loader = DataModule(data_name=data_name)
+def train(hparams):
+    train_loader = DataModule(data_name=hparams.dataset_name)
     train_loader.prepare_data()
     train_loader.setup()
 
@@ -26,7 +26,7 @@ def train(data_name, hparams):
         prefix=''
     )
 
-    logger = TensorBoardLogger('log', name=data_name)
+    logger = TensorBoardLogger('log', name=hparams.dataset_name)
     trainer = Trainer(
         logger=logger,
         default_root_dir='./log',
@@ -45,10 +45,10 @@ def main():
     parser.add_argument('--gpus', default=None)
     parser.add_argument('--tpu_cores', default=None)
     parser.add_argument('--max_epochs', default=50)
+    parser.add_argument('--dataset_name', default="MNIST")
     args = parser.parse_args()
 
-    for data_name in ['MNIST', 'FashionMNIST', 'KMNIST', 'CIFAR10']:
-        train(data_name, args)
+    train(args)
 
 
 if __name__ == "__main__":
